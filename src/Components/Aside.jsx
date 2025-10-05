@@ -1,10 +1,6 @@
 
-export default function Aside ({ handleCreateForm, projectList, handleSelectedProject, selectedID}) {
-   {/*  projectList.find(project => project.id === selectedID) */}
-  let listClass = "px-2 py-0.5 text-center w-[80%]";
- {/*  if(project.id === selectedID) {
-     listClass += "bg-blue-200/20"
-   };  */}
+export default function Aside ({ handleCreateForm, projectList, handleSelectedProject, selectedID, NoProject}) {
+  let listClass = "px-2 py-0.5 text-center w-[85%]";
 
   return (
     <aside className="flex flex-col items-center  gap-6 w-1/3 h-screen bg-black rounded-tr-2xl mt-8 py-8" aria-label="Sidebar">
@@ -22,11 +18,10 @@ export default function Aside ({ handleCreateForm, projectList, handleSelectedPr
              return (
             <li
               key={project.id}
-              className={project.id === selectedID ? listClass + " bg-blue-200/20" : listClass}
+              className={project.id === selectedID && !NoProject ? listClass + " bg-blue-200/20" : listClass}
             >
-              {/* call onSelectProject with the project id */}
               <button
-                className="text-white cursor-pointer text-[17px]"
+                className="text-white font-semibold cursor-pointer text-[17px] capitalize"
                 onClick={() => handleSelectedProject(project.id)}
               >
                 {project.title}

@@ -5,7 +5,7 @@ export default function Blank({ handleCreateForm }) {
   return (
     <div className="flex flex-col items-center justify-center gap-5 mt-40 ">
         <img src={logo} alt="Book of tasks" className="w-28 h-28" />
-        <h2 className="text-2xl font-bold text-center">No Projects Created</h2>
+        <h2 className="text-2xl font-bold text-center">No Projects Selected</h2>
         <p className="text-gray-600 text-center">Select a project or get started with a new one.</p>
         <button className="button" onClick={handleCreateForm}>Create new project</button>
     </div>
