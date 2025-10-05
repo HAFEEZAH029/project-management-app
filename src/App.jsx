@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Aside from './Components/Aside'
 import Blank from './Components/Blank'
 import Form from './Components/Form'
 import Projects from './Components/Projects'
+import Dialog from './Components/Dialog'
 import './App.css'
 
 function App() {
@@ -17,7 +18,8 @@ const [createdProject, setCreatedProject] = useState(false);
 const [noProject, setNoProject] = useState(true);
 const [projectList, setProjectList] = useState([]);
 const [selectedID, setSelectedID] = useState(null);
-{/**const [Tasks, setTasks] = useState([]); **/}
+const ModalRef = useRef(null);
+
 
 const handleChanges = (e) => {
   const { name, value } = e.target;
@@ -31,12 +33,14 @@ const handleCreateForm = () => {
   setInputDetails({projectName: "", description: "", dueDate: ""});
   setCreateForm(true);
   setNoProject(false);
+  setCreatedProject(false);
+  setSelectedID(null);
 };
 
 const handleNoProject = () => {
   setNoProject(true);
   setCreateForm(false);
- {/* setInputDetails({projectName: "", description: "", dueDate: ""}); */}
+  setCreatedProject(false);
 };
 
 const handleCreatedProject = (e) => {
@@ -65,6 +69,7 @@ const handleCreatedProject = (e) => {
   // show project view
     setCreatedProject(true);
     setCreateForm(false);
+    setNoProject(false);
 
   }}
 
@@ -75,6 +80,11 @@ const handleCreatedProject = (e) => {
     setNoProject(false);
     setCreateForm(false);
   };
+
+  const handleDeleteProject = (ProjectID) => {
+    setProjectList(prev => prev.filter(project => project.id !== ProjectID))
+    handleNoProject();
+  }
 
   const addNewTask = (projectID, newtaskname) => {
        const newTask ={id: Date.now().toString(), name: newtaskname};
@@ -87,11 +97,12 @@ const handleCreatedProject = (e) => {
 
   return (
     <div className="flex gap-10">
-      <Aside handleCreateForm={handleCreateForm} projectList={projectList} selectedID={selectedID} handleSelectedProject={handleSelectedProject} />
+      <Aside handleCreateForm={handleCreateForm} projectList={projectList} selectedID={selectedID} handleSelectedProject={handleSelectedProject} NoPoject={noProject} />
       <main className="flex-grow">
+        <Dialog ref={ModalRef} handleDeleteProject={handleDeleteProject} selectedID={selectedID} />
        { noProject && <Blank handleCreateForm={handleCreateForm} /> }
        { createForm && <Form handleChanges={handleChanges} handleNoProject={handleNoProject} inputDetails={inputDetails} handleCreatedProject={handleCreatedProject} /> }
-       { createdProject && <Projects  projectList={projectList} selectedID={selectedID} NewTask={addNewTask} deleteTask={deleteTaskFromProject} /> }
+       { createdProject && <Projects  projectList={projectList} selectedID={selectedID} NewTask={addNewTask} deleteTask={deleteTaskFromProject} ModalRef={ModalRef} /> }
       </main>
     </div>
   )
